@@ -6,6 +6,11 @@ export interface AuthRequest extends Request {
 }
 
 export const authenticate = (req: AuthRequest, res: Response, next: NextFunction): void => {
+  const secret = process.env.JWT_SECRET;
+  if (!secret) {
+    res.status(500).json({ error: 'Server configuration error' });
+    return;
+  }
   const authHeader = req.headers.authorization;
   if (!authHeader?.startsWith('Bearer ')) {
     res.status(401).json({ error: 'No token provided' });
@@ -13,7 +18,7 @@ export const authenticate = (req: AuthRequest, res: Response, next: NextFunction
   }
   const token = authHeader.split(' ')[1];
   try {
-  const decoded = jwt.verify(token, process.env.JWT_SECRET ?? (() => { throw new Error('JWT_SECRET not set'); })()) as {
+    const decoded = jwt.verify(token, secret) as {
       id: string;
       email: string;
       role: string;

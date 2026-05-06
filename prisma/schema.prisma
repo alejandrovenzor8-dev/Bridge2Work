@@ -1,0 +1,91 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id          String      @id @default(cuid())
+  name        String
+  email       String      @unique
+  password    String
+  role        Role        @default(ESTUDIANTE)
+  createdAt   DateTime    @default(now())
+  updatedAt   DateTime    @updatedAt
+  empresa     Empresa?
+  universidad Universidad?
+  estudiante  Estudiante?
+}
+
+enum Role {
+  ADMIN
+  EMPRESA
+  UNIVERSIDAD
+  ESTUDIANTE
+}
+
+model Empresa {
+  id                String          @id @default(cuid())
+  nombre            String
+  industria         String
+  tamano            String
+  ubicacion         String
+  website           String?
+  descripcion       String?
+  userId            String          @unique
+  user              User            @relation(fields: [userId], references: [id])
+  perfilesLaborales PerfilLaboral[]
+  createdAt         DateTime        @default(now())
+}
+
+model PerfilLaboral {
+  id                  String   @id @default(cuid())
+  puesto              String
+  descripcion         String?
+  habilidadesTecnicas String[]
+  softSkills          String[]
+  experienciaAnios    Int
+  herramientas        String[]
+  salarioMin          Float?
+  salarioMax          Float?
+  modalidad           String   @default("presencial")
+  empresaId           String
+  empresa             Empresa  @relation(fields: [empresaId], references: [id])
+  createdAt           DateTime @default(now())
+  updatedAt           DateTime @updatedAt
+}
+
+model Universidad {
+  id        String   @id @default(cuid())
+  nombre    String
+  ubicacion String
+  carreras  String[]
+  website   String?
+  userId    String   @unique
+  user      User     @relation(fields: [userId], references: [id])
+  createdAt DateTime @default(now())
+}
+
+model Estudiante {
+  id             String   @id @default(cuid())
+  intereses      String[]
+  habilidades    String[]
+  carreraInteres String?
+  nivelEducativo String?
+  userId         String   @unique
+  user           User     @relation(fields: [userId], references: [id])
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+}
+
+model Skill {
+  id          String   @id @default(cuid())
+  nombre      String   @unique
+  categoria   String
+  demanda     Int      @default(0)
+  crecimiento Float    @default(0)
+  createdAt   DateTime @default(now())
+}

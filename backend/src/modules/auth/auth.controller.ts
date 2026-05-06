@@ -45,8 +45,14 @@ const users: Array<{
   },
 ];
 
+const getJwtSecret = (): string => {
+  const secret = process.env.JWT_SECRET;
+  if (!secret) throw new Error('JWT_SECRET environment variable is required');
+  return secret;
+};
+
 const generateToken = (user: { id: string; email: string; role: string }) =>
-  jwt.sign({ id: user.id, email: user.email, role: user.role }, process.env.JWT_SECRET || 'bridge2work_secret', {
+  jwt.sign({ id: user.id, email: user.email, role: user.role }, getJwtSecret(), {
     expiresIn: '7d',
   });
 

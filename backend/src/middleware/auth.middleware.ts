@@ -13,7 +13,7 @@ export const authenticate = (req: AuthRequest, res: Response, next: NextFunction
   }
   const token = authHeader.split(' ')[1];
   try {
-    const decoded = jwt.verify(token, process.env.JWT_SECRET || 'secret') as {
+  const decoded = jwt.verify(token, process.env.JWT_SECRET ?? (() => { throw new Error('JWT_SECRET not set'); })()) as {
       id: string;
       email: string;
       role: string;

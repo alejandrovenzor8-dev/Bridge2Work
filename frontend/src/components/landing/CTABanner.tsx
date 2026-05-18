@@ -13,7 +13,7 @@ export function CTABanner() {
           Únete a más de 1,200 usuarios que ya usan Bridge2Work para tomar decisiones más inteligentes.
         </p>
         <Link href="/register">
-          <Button size="lg" className="bg-white text-[#0F172A] hover:bg-white/90 gap-2">
+          <Button size="lg" variant="secondary" className="gap-2">
             Crear cuenta gratis <ArrowRight className="w-5 h-5" />
           </Button>
         </Link>

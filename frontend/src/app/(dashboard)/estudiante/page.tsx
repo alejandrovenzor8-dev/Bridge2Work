@@ -1,9 +1,10 @@
 'use client';
 
-import { useState } from 'react';
-import { Target, BookOpen, Briefcase, CheckCircle } from 'lucide-react';
-import { StatsCard } from '@/components/dashboard/StatsCard';
-import { SkillsChart } from '@/components/dashboard/SkillsChart';
+import { useState, useEffect } from 'react';
+import Link from 'next/link';
+import { Target, BookOpen, Briefcase, TrendingUp, ArrowRight, User, Lightbulb, Map } from 'lucide-react';
+import { MetricCard } from '@/components/shared/MetricCard';
+import { BarChart } from '@/components/shared/Charts';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Progress } from '@/components/ui/progress';
@@ -15,118 +16,176 @@ const recommendations = [
   { carrera: 'DevOps/Cloud', match: 76, habilidades: ['Docker', 'AWS', 'Linux'], demanda: 'Media' },
 ];
 
-const testQuestions = [
-  { id: 1, pregunta: '¿Prefieres trabajar con datos y análisis numérico?', respuesta: null as boolean | null },
-  { id: 2, pregunta: '¿Te interesa crear software o aplicaciones?', respuesta: null as boolean | null },
-  { id: 3, pregunta: '¿Disfrutas diseñar interfaces visuales?', respuesta: null as boolean | null },
-  { id: 4, pregunta: '¿Te atrae liderar equipos de trabajo?', respuesta: null as boolean | null },
+const skillsData = [
+  { name: 'React', value: 85 },
+  { name: 'Python', value: 70 },
+  { name: 'Git', value: 90 },
+  { name: 'SQL', value: 60 },
 ];
 
 export default function EstudianteDashboard() {
-  const [questions, setQuestions] = useState(testQuestions);
-  const [testDone, setTestDone] = useState(false);
-
-  function answer(id: number, val: boolean) {
-    setQuestions(q => q.map(item => item.id === id ? { ...item, respuesta: val } : item));
-  }
-
-  function submitTest() {
-    setTestDone(true);
-  }
-
-  const answered = questions.filter(q => q.respuesta !== null).length;
+  const [loading, setLoading] = useState(false);
 
   return (
     <div className="space-y-8">
-      <div>
-        <h1 className="text-2xl font-bold text-[#0F172A]">Mi Panel</h1>
-        <p className="text-[#64748B]">Descubre tu camino profesional ideal</p>
+      <div className="flex items-center justify-between">
+        <div>
+          <h1 className="text-2xl font-bold text-[#0F172A]">Mi Panel</h1>
+          <p className="text-[#64748B]">Descubre tu camino profesional ideal</p>
+        </div>
+        <Link href="/estudiante/perfil">
+          <Button className="gap-2">
+            <User className="w-4 h-4" /> Mi Perfil
+          </Button>
+        </Link>
       </div>
 
-      <div className="grid grid-cols-1 sm:grid-cols-3 gap-6">
-        <StatsCard title="Match Promedio" value="86%" trend={5} icon={<Target className="w-5 h-5 text-[#06B6D4]" />} />
-        <StatsCard title="Habilidades Mapeadas" value="12" icon={<BookOpen className="w-5 h-5 text-[#8B5CF6]" />} />
-        <StatsCard title="Oportunidades Abiertas" value="34" trend={22} icon={<Briefcase className="w-5 h-5 text-[#06B6D4]" />} />
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+        <MetricCard
+          title="Compatibilidad"
+          value="86%"
+          icon={Target}
+          color="cyan"
+          change={5}
+          trend="up"
+          description="Con el mercado laboral"
+        />
+        <MetricCard
+          title="Skills Desarrolladas"
+          value={12}
+          icon={BookOpen}
+          color="purple"
+          description="Habilidades mapeadas"
+        />
+        <MetricCard
+          title="Oportunidades"
+          value={34}
+          icon={Briefcase}
+          color="green"
+          change={22}
+          trend="up"
+          description="Posiciones disponibles"
+        />
+        <MetricCard
+          title="Progreso"
+          value="67%"
+          icon={TrendingUp}
+          color="orange"
+          description="De tu roadmap"
+        />
+      </div>
+
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+        <Link href="/estudiante/perfil" className="block group">
+          <div className="bg-white rounded-lg border border-[#E2E8F0] p-6 hover:shadow-lg transition-all hover:border-[#06B6D4]">
+            <div className="flex items-center justify-between mb-4">
+              <div className="w-12 h-12 rounded-lg bg-[#06B6D4]/10 flex items-center justify-center">
+                <User className="w-6 h-6 text-[#06B6D4]" />
+              </div>
+              <ArrowRight className="w-5 h-5 text-[#64748B] group-hover:text-[#06B6D4] transition-colors" />
+            </div>
+            <h3 className="text-lg font-semibold text-[#0F172A] mb-2">Mi Perfil</h3>
+            <p className="text-sm text-[#64748B]">Actualiza tus habilidades e intereses</p>
+          </div>
+        </Link>
+
+        <Link href="/estudiante/recomendaciones" className="block group">
+          <div className="bg-white rounded-lg border border-[#E2E8F0] p-6 hover:shadow-lg transition-all hover:border-[#8B5CF6]">
+            <div className="flex items-center justify-between mb-4">
+              <div className="w-12 h-12 rounded-lg bg-[#8B5CF6]/10 flex items-center justify-center">
+                <Lightbulb className="w-6 h-6 text-[#8B5CF6]" />
+              </div>
+              <ArrowRight className="w-5 h-5 text-[#64748B] group-hover:text-[#8B5CF6] transition-colors" />
+            </div>
+            <h3 className="text-lg font-semibold text-[#0F172A] mb-2">Recomendaciones IA</h3>
+            <p className="text-sm text-[#64748B]">Carreras y skills sugeridas</p>
+          </div>
+        </Link>
+
+        <Link href="/estudiante/roadmap" className="block group">
+          <div className="bg-white rounded-lg border border-[#E2E8F0] p-6 hover:shadow-lg transition-all hover:border-[#10B981]">
+            <div className="flex items-center justify-between mb-4">
+              <div className="w-12 h-12 rounded-lg bg-[#10B981]/10 flex items-center justify-center">
+                <Map className="w-6 h-6 text-[#10B981]" />
+              </div>
+              <ArrowRight className="w-5 h-5 text-[#64748B] group-hover:text-[#10B981] transition-colors" />
+            </div>
+            <h3 className="text-lg font-semibold text-[#0F172A] mb-2">Mi Roadmap</h3>
+            <p className="text-sm text-[#64748B]">Ruta de aprendizaje personalizada</p>
+          </div>
+        </Link>
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         <Card>
-          <CardHeader><CardTitle>Carreras Recomendadas</CardTitle></CardHeader>
+          <CardHeader>
+            <div className="flex items-center justify-between">
+              <CardTitle>Carreras Recomendadas</CardTitle>
+              <Link href="/estudiante/recomendaciones">
+                <Button variant="ghost" size="sm">Ver todas</Button>
+              </Link>
+            </div>
+          </CardHeader>
           <CardContent className="space-y-4">
             {recommendations.map((r) => (
-              <div key={r.carrera} className="p-4 border border-[#E2E8F0] rounded-lg space-y-3">
+              <div key={r.carrera} className="p-4 border border-[#E2E8F0] rounded-lg space-y-3 hover:border-[#06B6D4] transition-colors">
                 <div className="flex items-center justify-between">
                   <span className="font-semibold text-[#0F172A]">{r.carrera}</span>
                   <div className="flex items-center gap-2">
-                    <Badge variant={r.demanda === 'Alta' ? 'success' : 'warning'}>{r.demanda} demanda</Badge>
+                    <Badge
+                      className={r.demanda === 'Alta' ? 'bg-[#10B981]' : 'bg-[#F59E0B]'}
+                    >
+                      {r.demanda} demanda
+                    </Badge>
                     <span className="text-[#06B6D4] font-bold">{r.match}%</span>
                   </div>
                 </div>
                 <Progress value={r.match} />
                 <div className="flex flex-wrap gap-1">
-                  {r.habilidades.map(h => <Badge key={h} variant="outline">{h}</Badge>)}
+                  {r.habilidades.map(h => (
+                    <Badge key={h} variant="outline" className="text-xs">{h}</Badge>
+                  ))}
                 </div>
               </div>
             ))}
           </CardContent>
         </Card>
 
-        <Card>
-          <CardHeader><CardTitle>Test Vocacional</CardTitle></CardHeader>
-          <CardContent>
-            {testDone ? (
-              <div className="text-center py-8">
-                <CheckCircle className="w-16 h-16 text-green-500 mx-auto mb-4" />
-                <h3 className="text-lg font-semibold text-[#0F172A] mb-2">¡Test completado!</h3>
-                <p className="text-[#64748B] text-sm mb-4">Tu perfil ha sido actualizado con tus preferencias.</p>
-                <Button variant="outline" onClick={() => { setTestDone(false); setQuestions(testQuestions); }}>
-                  Volver a tomar el test
-                </Button>
-              </div>
-            ) : (
-              <div className="space-y-4">
-                <div className="flex justify-between items-center mb-2">
-                  <span className="text-sm text-[#64748B]">Progreso</span>
-                  <span className="text-sm font-medium">{answered}/{questions.length}</span>
-                </div>
-                <Progress value={(answered / questions.length) * 100} />
-
-                {questions.map((q) => (
-                  <div key={q.id} className="p-3 border border-[#E2E8F0] rounded-lg">
-                    <p className="text-sm text-[#0F172A] mb-3">{q.pregunta}</p>
-                    <div className="flex gap-2">
-                      <button
-                        onClick={() => answer(q.id, true)}
-                        className={`flex-1 py-1.5 rounded text-sm font-medium transition-colors ${
-                          q.respuesta === true ? 'bg-[#06B6D4] text-white' : 'bg-[#F1F5F9] text-[#64748B] hover:bg-[#E2E8F0]'
-                        }`}
-                      >
-                        Sí
-                      </button>
-                      <button
-                        onClick={() => answer(q.id, false)}
-                        className={`flex-1 py-1.5 rounded text-sm font-medium transition-colors ${
-                          q.respuesta === false ? 'bg-[#8B5CF6] text-white' : 'bg-[#F1F5F9] text-[#64748B] hover:bg-[#E2E8F0]'
-                        }`}
-                      >
-                        No
-                      </button>
-                    </div>
-                  </div>
-                ))}
-
-                {answered === questions.length && (
-                  <Button className="w-full" onClick={submitTest}>
-                    Ver resultados
-                  </Button>
-                )}
-              </div>
-            )}
-          </CardContent>
-        </Card>
+        <div className="bg-white rounded-lg border border-[#E2E8F0] p-6">
+          <h3 className="text-lg font-semibold text-[#0F172A] mb-4">
+            Mis Habilidades
+          </h3>
+          <p className="text-sm text-[#64748B] mb-4">
+            Nivel de dominio de tus skills principales
+          </p>
+          <BarChart data={skillsData} height={300} />
+        </div>
       </div>
 
-      <SkillsChart />
+      <div className="bg-gradient-to-br from-[#06B6D4]/5 to-[#8B5CF6]/5 rounded-lg border border-[#E2E8F0] p-8">
+        <div className="flex items-start justify-between">
+          <div className="max-w-xl">
+            <h3 className="text-xl font-bold text-[#0F172A] mb-2">
+              ¿Listo para crecer profesionalmente?
+            </h3>
+            <p className="text-[#64748B] mb-4">
+              Completa tu roadmap de aprendizaje y descubre las oportunidades que te esperan 
+              en el mercado laboral. Nuestro sistema de IA te guiará paso a paso.
+            </p>
+            <Link href="/estudiante/roadmap">
+              <Button>Ver Mi Roadmap</Button>
+            </Link>
+          </div>
+          <div className="hidden lg:block">
+            <div className="w-32 h-32 rounded-full bg-gradient-to-br from-[#06B6D4] to-[#8B5CF6] flex items-center justify-center text-white">
+              <div className="text-center">
+                <div className="text-3xl font-bold">67%</div>
+                <div className="text-xs">Completado</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
   );
 }

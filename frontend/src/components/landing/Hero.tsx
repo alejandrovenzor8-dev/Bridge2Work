@@ -31,12 +31,12 @@ export function Hero() {
 
         <div className="flex flex-col sm:flex-row gap-4 justify-center mb-16">
           <Link href="/register">
-            <Button size="lg" className="gap-2 text-base">
+            <Button size="lg" variant="secondary" className="gap-2 text-base">
               Comenzar gratis <ArrowRight className="w-5 h-5" />
             </Button>
           </Link>
           <Link href="#how-it-works">
-            <Button size="lg" variant="outline" className="gap-2 text-base border-white/20 text-white hover:bg-white/10">
+            <Button size="lg" variant="outline" className="gap-2 text-base border-[#E2E8F0] text-[#0F172A] hover:bg-[#F1F5F9]">
               <BarChart2 className="w-5 h-5" /> Ver cómo funciona
             </Button>
           </Link>

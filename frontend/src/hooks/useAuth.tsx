@@ -1,6 +1,7 @@
 'use client';
 
 import React, { createContext, useContext, useState, useEffect, ReactNode } from 'react';
+import { useRouter } from 'next/navigation';
 import { User, AuthState } from '@/types';
 import { getStoredUser, getToken, setToken, removeToken, setStoredUser } from '@/lib/auth';
 
@@ -12,6 +13,7 @@ interface AuthContextType extends AuthState {
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
 export function AuthProvider({ children }: { children: ReactNode }) {
+  const router = useRouter();
   const [state, setState] = useState<AuthState>({
     user: null,
     token: null,
@@ -35,6 +37,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   function logout() {
     removeToken();
     setState({ token: null, user: null, isAuthenticated: false });
+    router.push('/login');
   }
 
   return <AuthContext.Provider value={{ ...state, login, logout }}>{children}</AuthContext.Provider>;

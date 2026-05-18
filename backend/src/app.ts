@@ -10,6 +10,8 @@ import companyRoutes from './modules/companies/company.routes';
 import jobProfileRoutes from './modules/job-profiles/jobProfile.routes';
 import skillRoutes from './modules/skills/skill.routes';
 import analyticsRoutes from './modules/analytics/analytics.routes';
+import matchingRoutes from './modules/matching/matching.routes';
+import recommendationsRoutes from './modules/recommendations/recommendations.routes';
 
 dotenv.config();
 
@@ -44,6 +46,8 @@ app.use('/api/companies', apiLimiter, companyRoutes);
 app.use('/api/job-profiles', apiLimiter, jobProfileRoutes);
 app.use('/api/skills', apiLimiter, skillRoutes);
 app.use('/api/analytics', apiLimiter, analyticsRoutes);
+app.use('/api/matching', apiLimiter, matchingRoutes);
+app.use('/api/recommendations', apiLimiter, recommendationsRoutes);
 
 app.use((_req, res) => res.status(404).json({ error: 'Route not found' }));
 

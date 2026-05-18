@@ -90,3 +90,75 @@ export interface CareerTrend {
   software: number;
   industrial: number;
 }
+
+// Matching y Recomendaciones
+export interface MatchScore {
+  estudiante: Estudiante & { user: User };
+  perfilLaboral: PerfilLaboral;
+  score: number;
+  skillsCoincidentes: string[];
+  skillsFaltantes: string[];
+  fortalezas: string[];
+}
+
+export interface CareerRecommendation {
+  id: string;
+  carrera: string;
+  compatibilidad: number;
+  razones: string[];
+  habilidadesRequeridas: string[];
+  salarioPromedio: number;
+  demandaLaboral: number;
+}
+
+export interface SkillRecommendation {
+  skill: Skill;
+  prioridad: 'alta' | 'media' | 'baja';
+  razon: string;
+  recursos?: string[];
+}
+
+// Analytics Empresariales
+export interface CompanyAnalytics {
+  perfilesCreados: number;
+  candidatosPotenciales: number;
+  skillsMasDemandadas: Array<{ skill: string; count: number }>;
+  tendenciasContratacion: ChartDataPoint[];
+  matchingPromedio: number;
+}
+
+// Analytics Universitarias
+export interface UniversityAnalytics {
+  carrerasMasDemandadas: Array<{ carrera: string; demanda: number }>;
+  skillsEmergentes: Array<{ skill: string; crecimiento: number }>;
+  industriasEnCrecimiento: Array<{ industria: string; porcentaje: number }>;
+  brechaHabilidades: Array<{ skill: string; brecha: number }>;
+}
+
+// Roadmap de Aprendizaje
+export interface LearningPath {
+  id: string;
+  titulo: string;
+  descripcion: string;
+  pasos: LearningStep[];
+  duracionEstimada: string;
+  dificultad: 'principiante' | 'intermedio' | 'avanzado';
+}
+
+export interface LearningStep {
+  id: string;
+  titulo: string;
+  descripcion: string;
+  recursos: string[];
+  completado: boolean;
+  orden: number;
+}
+
+// Reportes
+export interface Report {
+  id: string;
+  titulo: string;
+  tipo: 'empresa' | 'universidad' | 'estudiante' | 'global';
+  generadoEn: string;
+  datos: any;
+}

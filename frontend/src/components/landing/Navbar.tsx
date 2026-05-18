@@ -27,10 +27,10 @@ export function Navbar() {
 
           <div className="hidden md:flex items-center gap-3">
             <Link href="/login">
-              <Button variant="ghost" className="text-slate-300 hover:text-white hover:bg-white/10">Iniciar sesión</Button>
+              <Button variant="outline" className="text-[#0F172A] border-[#E2E8F0] hover:bg-[#F1F5F9]">Iniciar sesión</Button>
             </Link>
             <Link href="/register">
-              <Button>Comenzar gratis</Button>
+              <Button variant="secondary">Comenzar gratis</Button>
             </Link>
           </div>
 
